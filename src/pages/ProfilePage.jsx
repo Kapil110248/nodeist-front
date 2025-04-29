@@ -36,7 +36,7 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
-      <h2>My Profile</h2>
+      <h2>My Profile  </h2>
       <img
         src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
         alt="Profile"
