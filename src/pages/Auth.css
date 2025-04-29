@@ -1,0 +1,115 @@
+/* Auth.css */
+
+/* Full Page Background */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff; /* White background */
+  position: relative;
+}
+
+/* Logo Container */
+.logo-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo-container .logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.logo-container .logo-text {
+  font-size: 30px;
+  font-weight: bold;
+  color: #ff6a00; /* Orange theme */
+}
+
+/* Auth Card */
+.auth-card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Title */
+.auth-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #ff6a00; /* Orange */
+}
+
+/* Form Controls */
+.form-control {
+  margin-bottom: 15px;
+}
+
+.auth-card label {
+  font-weight: 600;
+}
+
+/* Button */
+.btn-primary {
+  background-color: #ff6a00;
+  border: none;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: #e55b00;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Utilities */
+.mt-3 {
+  margin-top: 15px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Password Toggle Button */
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle-btn:focus {
+  outline: none;
+}

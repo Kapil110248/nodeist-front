@@ -1,0 +1,56 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  padding: 20px;
+  transition: width 0.3s ease, box-shadow 0.3s ease;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow when open */
+  z-index: 100;
+}
+
+.sidebar.closed {
+  width: 70px;
+  box-shadow: none; /* Remove shadow when closed */
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.settings-link {
+  margin-top: auto;
+}
+
+/* Additional styling when sidebar is collapsed */
+.sidebar.closed .nav-link,
+.sidebar.closed .logo,
+.sidebar.closed .settings-link {
+  display: none; /* Hide all content when sidebar is closed */
+}
+
+.sidebar.closed .toggle-btn {
+  display: block; /* Show only the toggle button when collapsed */
+}
+/* Sidebar.css */
+.logout-btn {
+  margin-top: 20px;
+}
+
+.logout-btn .btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+}
+
+.logout-btn .btn:hover {
+  background-color: #ff3333;
+}
