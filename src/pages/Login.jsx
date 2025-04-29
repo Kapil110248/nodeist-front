@@ -14,10 +14,13 @@ const Login = ({ setToken }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
       const token = response.data.token;
 
@@ -79,7 +82,11 @@ const Login = ({ setToken }) => {
                 className="password-toggle-btn"
                 onClick={togglePasswordVisibility}
               >
-                <i className={passwordVisible ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                <i
+                  className={
+                    passwordVisible ? "fas fa-eye-slash" : "fas fa-eye"
+                  }
+                ></i>
               </button>
             </div>
           </div>
@@ -89,7 +96,10 @@ const Login = ({ setToken }) => {
           </button>
 
           <p className="mt-3 text-center">
-            Don't have an account? <Link to="/register" style={{ color: "blue" }}>Register</Link>
+            Don't have an account?{" "}
+            <Link to="/register" style={{ color: "blue" }}>
+              Register
+            </Link>
           </p>
         </form>
       </div>

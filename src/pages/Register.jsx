@@ -24,11 +24,14 @@ const Register = ({ setToken }) => {
 
       try {
         // Sending data to backend API for registration
-        const response = await axios.post("http://localhost:5000/api/auth/register", {
-          name,
-          email,
-          password,
-        });
+        const response = await axios.post(
+          "http://localhost:5000/api/auth/register",
+          {
+            name,
+            email,
+            password,
+          }
+        );
 
         // On success, show success message and navigate to login page
         toast.success("Registration successful! Please login now.");
@@ -105,7 +108,11 @@ const Register = ({ setToken }) => {
                 className="password-toggle-btn"
                 onClick={togglePasswordVisibility}
               >
-                <i className={passwordVisible ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                <i
+                  className={
+                    passwordVisible ? "fas fa-eye-slash" : "fas fa-eye"
+                  }
+                ></i>
               </button>
             </div>
           </div>
@@ -126,7 +133,11 @@ const Register = ({ setToken }) => {
                 className="password-toggle-btn"
                 onClick={toggleConfirmPasswordVisibility}
               >
-                <i className={confirmPasswordVisible ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                <i
+                  className={
+                    confirmPasswordVisible ? "fas fa-eye-slash" : "fas fa-eye"
+                  }
+                ></i>
               </button>
             </div>
           </div>
