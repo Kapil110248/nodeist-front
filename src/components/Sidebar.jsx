@@ -4,6 +4,7 @@ import "./Sidebar.css";
 
 const Sidebar = ({ setToken }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
@@ -15,12 +16,21 @@ const Sidebar = ({ setToken }) => {
     localStorage.removeItem("token");
     setToken(null); // Update state for token
 
+    // Remove profile info from localStorage
+    localStorage.removeItem("profileImage");
+    localStorage.removeItem("username");
+
     // Redirect to login page
     navigate("/login");
-
-    // Optional: If you have a global state or context for user authentication,
-    // you can reset the user state here as well.
   };
+
+  const handleCancelLogout = () => {
+    setShowConfirmation(false); // Hide the confirmation dialog
+  };
+
+  // Get profile photo and username from localStorage
+  const profileImage = localStorage.getItem("profileImage");
+  const username = localStorage.getItem("username");
 
   return (
     <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
@@ -49,6 +59,18 @@ const Sidebar = ({ setToken }) => {
             <span className="fs-5 fw-bold text-dark">Todoist</span>
           </Link>
 
+          {/* Profile Section */}
+          <div className="profile-section d-flex align-items-center my-3">
+            <img
+              src={profileImage || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
+              alt="Profile"
+              width="40"
+              height="40"
+              className="rounded-circle me-2"
+            />
+            <span className="fw-bold">{username || "User"}</span> {/* Display username or default "User" */}
+          </div>
+
           {/* Main nav links */}
           <ul className="nav flex-column flex-grow-1">
             <li className="nav-item">
@@ -71,11 +93,6 @@ const Sidebar = ({ setToken }) => {
                 <i className="fas fa-check-circle me-2"></i> Completed Tasks
               </Link>
             </li>
-            <li className="nav-item">
-              <Link to="/profile" className="nav-link text-dark">
-                <i className="fas fa-user me-2"></i> Profile
-              </Link>
-            </li>
           </ul>
 
           {/* Settings fixed at bottom */}
@@ -87,10 +104,27 @@ const Sidebar = ({ setToken }) => {
 
           {/* Logout Button at the bottom */}
           <div className="logout-btn mt-3">
-            <button onClick={handleLogout} className="nav-link text-dark">
+            <button onClick={() => setShowConfirmation(true)} className="nav-link text-dark">
               <i className="fas fa-sign-out-alt me-2"></i> Logout
             </button>
           </div>
+
+          {/* Logout Confirmation Modal */}
+          {showConfirmation && (
+            <div className="confirmation-modal">
+              <div className="modal-content">
+                <p>Are you sure you want to logout?</p>
+                <div className="modal-buttons">
+                  <button onClick={handleLogout} className="btn btn-danger">
+                    Logout
+                  </button>
+                  <button onClick={handleCancelLogout} className="btn btn-secondary">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

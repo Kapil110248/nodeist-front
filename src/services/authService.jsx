@@ -29,16 +29,13 @@ export const loginUser = async (userData) => {
 };
 
 // Get user profile
+
+
 export const getUserProfile = async (token) => {
-  try {
-    const res = await axios.get("http://localhost:5000/api/auth/profile", {
-      headers: {
-        "x-auth-token": token,
-      },
-    });
-    return res.data; // User data from backend
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const response = await axios.get("http://localhost:5000/api/users/profile", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
 };
