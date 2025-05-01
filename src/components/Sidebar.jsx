@@ -7,72 +7,69 @@ const Sidebar = ({ setToken }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
   const handleLogout = () => {
-    // Remove token from localStorage to log the user out
     localStorage.removeItem("token");
-    setToken(null); // Update state for token
-
-    // Remove profile info from localStorage
     localStorage.removeItem("profileImage");
     localStorage.removeItem("username");
-
-    // Redirect to login page
+    setToken(null);
     navigate("/login");
   };
 
-  const handleCancelLogout = () => {
-    setShowConfirmation(false); // Hide the confirmation dialog
-  };
+  const handleCancelLogout = () => setShowConfirmation(false);
 
-  // Get profile photo and username from localStorage
   const profileImage = localStorage.getItem("profileImage");
   const username = localStorage.getItem("username");
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
-      {/* Toggle Button */}
-      <div className="d-flex justify-content-end">
+    <div className={`sidebar ${isOpen ? "open" : "closed"} position-relative d-flex flex-column`}>
+      {/* ✅ Toggle Button at Top Right */}
+      <div className="d-flex justify-content-end p-2">
         <button className="toggle-btn" onClick={toggleSidebar}>
           <i className="fas fa-bars"></i>
         </button>
       </div>
 
-      {/* Show content only if sidebar is open */}
+      {/* ✅ Profile Section (only if sidebar is open) */}
       {isOpen && (
-        <>
-          {/* Logo */}
-          <Link
-            to="/"
-            className="logo d-flex align-items-center my-3 text-decoration-none"
-          >
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKLhpF90FNSYq7H8onLEJB40mzNDtg3xx-Cx3TlntFHc4LkNZYgcaq9gYlumepxHmUCdc&usqp=CAU"
-              alt="Logo"
-              width="30"
-              height="30"
-              className="me-2"
-            />
-            <span className="fs-5 fw-bold text-dark">Todoist</span>
-          </Link>
+        <Link
+          to="/profile"
+          className="top-profile d-flex align-items-center justify-content-end px-3 text-decoration-none"
+          style={{ cursor: "pointer" }}
+        >
+          <img
+            src={
+              profileImage ||
+              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            }
+            alt="Profile"
+            width="35"
+            height="35"
+            className="rounded-circle me-2"
+          />
+          <span className="fw-bold text-dark">{username || "User"}</span>
+        </Link>
+      )}
 
-          {/* Profile Section */}
-          <div className="profile-section d-flex align-items-center my-3">
-            <img
-              src={profileImage || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
-              alt="Profile"
-              width="40"
-              height="40"
-              className="rounded-circle me-2"
-            />
-            <span className="fw-bold">{username || "User"}</span> {/* Display username or default "User" */}
-          </div>
+      {/* ✅ Sidebar Content */}
+      {isOpen && (
+        <div className="d-flex flex-column flex-grow-1">
+          {/* Removed Logo Section */}
+          {/* <div style={{ marginTop: "60px" }}> */}
+          {/*   <Link to="/" className="logo d-flex align-items-center my-3 text-decoration-none"> */}
+          {/*     <img */}
+          {/*       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKLhpF90FNSYq7H8onLEJB40mzNDtg3xx-Cx3TlntFHc4LkNZYgcaq9gYlumepxHmUCdc&usqp=CAU" */}
+          {/*       alt="Logo" */}
+          {/*       width="30" */}
+          {/*       height="30" */}
+          {/*       className="me-2" */}
+          {/*     /> */}
+          {/*     <span className="fs-5 fw-bold text-dark">Todoist</span> */}
+          {/*   </Link> */}
+          {/* </div> */}
 
-          {/* Main nav links */}
-          <ul className="nav flex-column flex-grow-1">
+          <ul className="nav flex-column">
             <li className="nav-item">
               <Link to="/" className="nav-link text-dark">
                 <i className="fas fa-home me-2"></i> Home
@@ -94,22 +91,22 @@ const Sidebar = ({ setToken }) => {
               </Link>
             </li>
           </ul>
-
-          {/* Settings fixed at bottom */}
-          <div className="settings-link mt-auto">
-            <Link to="/settings" className="nav-link text-dark">
-              <i className="fas fa-cog me-2"></i> Settings
-            </Link>
+          <div className="mt-auto">
+            <div className="settings-link">
+              <Link to="/settings" className="nav-link text-dark">
+                <i className="fas fa-cog me-2"></i> Settings
+              </Link>
+            </div>
+            <div className="logout-btn mt-3 mb-3">
+              <button
+                onClick={() => setShowConfirmation(true)}
+                className="nav-link text-dark"
+              >
+                <i className="fas fa-sign-out-alt me-2"></i> Logout
+              </button>
+            </div>
           </div>
-
-          {/* Logout Button at the bottom */}
-          <div className="logout-btn mt-3">
-            <button onClick={() => setShowConfirmation(true)} className="nav-link text-dark">
-              <i className="fas fa-sign-out-alt me-2"></i> Logout
-            </button>
-          </div>
-
-          {/* Logout Confirmation Modal */}
+          {/* Logout Confirmation */}
           {showConfirmation && (
             <div className="confirmation-modal">
               <div className="modal-content">
@@ -118,14 +115,17 @@ const Sidebar = ({ setToken }) => {
                   <button onClick={handleLogout} className="btn btn-danger">
                     Logout
                   </button>
-                  <button onClick={handleCancelLogout} className="btn btn-secondary">
+                  <button
+                    onClick={handleCancelLogout}
+                    className="btn btn-secondary"
+                  >
                     Cancel
                   </button>
                 </div>
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

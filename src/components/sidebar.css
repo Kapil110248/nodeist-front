@@ -85,3 +85,13 @@
   width: 100px;
   margin: 0 10px;
 }
+.sidebar {
+  position: relative;
+}
+
+.top-profile {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}

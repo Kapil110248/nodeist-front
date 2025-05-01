@@ -6,12 +6,12 @@ import "./ProfilePage.css";
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [profileImage, setProfileImage] = useState(
-    localStorage.getItem("profileImage") || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" // Default image if not found
-  ); // Initialize with image from localStorage or default image
+    localStorage.getItem("profileImage") ||
+      "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+  );
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  // Fetch profile data on component mount
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -20,8 +20,12 @@ const ProfilePage = () => {
           navigate("/login");
           return;
         }
+
         const data = await getUserProfile(token);
         setProfile(data.user);
+
+        // 👇 Save name to localStorage
+        localStorage.setItem("username", data.user.name);
       } catch (error) {
         console.error(error);
       }
@@ -42,9 +46,9 @@ const ProfilePage = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create URL for the selected image
+      const imageUrl = URL.createObjectURL(file);
       setProfileImage(imageUrl);
-      localStorage.setItem("profileImage", imageUrl); // Store the new image URL in localStorage
+      localStorage.setItem("profileImage", imageUrl);
     }
   };
 
@@ -54,7 +58,7 @@ const ProfilePage = () => {
     <div className="profile-container">
       <h2>My Profile</h2>
       <img
-        src={profileImage} // Use profile image from state (or localStorage)
+        src={profileImage}
         alt="Profile"
         width="120"
         height="120"
