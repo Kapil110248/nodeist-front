@@ -23,7 +23,7 @@ const Sidebar = ({ setToken }) => {
   const username = localStorage.getItem("username");
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : "closed"} position-relative d-flex flex-column`}>
+    <div className={`sidebar ${isOpen ? "open" : "closed"} position-fixed d-flex flex-column`} >
       {/* ✅ Toggle Button at Top Right */}
       <div className="d-flex justify-content-end p-2">
         <button className="toggle-btn" onClick={toggleSidebar}>
