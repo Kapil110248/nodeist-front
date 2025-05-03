@@ -28,6 +28,9 @@ const CompletedTasks = () => {
         return true;
       });
 
+      // Sort tasks by the completedAt date in descending order (most recent first)
+      filtered.sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
+
       setCompletedTasks(filtered);
     } catch (error) {
       console.error("Error fetching completed tasks:", error);
