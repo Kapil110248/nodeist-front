@@ -92,8 +92,8 @@ const Sidebar = ({ setToken }) => {
             </li>
           </ul>
           <div className="mt-auto">
-            <div className="settings-link">
-              <Link to="/settings" className="nav-link text-dark">
+            <div className="settings-link" style={{marginLeft : "15px"}}>
+              <Link to="/settings" className="nav-link text-dark" style={{marginBottom : "-10px"}}>
                 <i className="fas fa-cog me-2"></i> Settings
               </Link>
             </div>
@@ -101,7 +101,7 @@ const Sidebar = ({ setToken }) => {
               <button
                 onClick={() => setShowConfirmation(true)}
                 className="nav-link text-dark"
-              >
+              style={{marginBottom : "-30px"}}>
                 <i className="fas fa-sign-out-alt me-2"></i> Logout
               </button>
             </div>

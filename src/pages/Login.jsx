@@ -5,22 +5,25 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const Login = ({ setToken }) => {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false); // For toggle password visibility
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error("Enter valid 10-digit phone number");
+      return;
+    }
+
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:5000/api/auth/login", {
+        phone,
+        password,
+      });
 
       const token = response.data.token;
 
@@ -55,13 +58,17 @@ const Login = ({ setToken }) => {
         <h2 className="auth-title">Login to Todoist</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label>Email</label>
+            <label>Phone</label>
             <input
-              type="email"
+              type="tel"
               className="form-control"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter 10-digit phone number"
+              value={phone}
+              maxLength={10}
+              onChange={(e) => {
+                const input = e.target.value;
+                if (/^\d*$/.test(input)) setPhone(input);
+              }}
               required
             />
           </div>
@@ -82,11 +89,7 @@ const Login = ({ setToken }) => {
                 className="password-toggle-btn"
                 onClick={togglePasswordVisibility}
               >
-                <i
-                  className={
-                    passwordVisible ? "fas fa-eye-slash" : "fas fa-eye"
-                  }
-                ></i>
+                <i className={passwordVisible ? "fas fa-eye-slash" : "fas fa-eye"}></i>
               </button>
             </div>
           </div>

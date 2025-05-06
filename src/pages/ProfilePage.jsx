@@ -1,15 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserProfile, updateUserProfile, deleteUserAccount } from "../services/authService";
+import {
+  getUserProfile,
+  updateUserProfile,
+  deleteUserAccount,
+} from "../services/authService";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [profileImage, setProfileImage] = useState(
     localStorage.getItem("profileImage") ||
-    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+      "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
   );
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -25,7 +30,8 @@ const ProfilePage = () => {
         const data = await getUserProfile(token);
         setProfile(data.user);
         setName(data.user.name);
-        setEmail(data.user.email);
+        setEmail(data.user.email || "");
+        setPhone(data.user.phone || "");
         localStorage.setItem("username", data.user.name);
       } catch (error) {
         console.error(error);
@@ -53,19 +59,27 @@ const ProfilePage = () => {
     }
   };
 
-  const handleSave = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const updated = await updateUserProfile({ name, email }, token);
-      alert("Profile updated successfully!");
-      setProfile(updated.user);
-    } catch (err) {
-      console.error("Update failed:", err);
+  const handleKeyDown = async (e) => {
+    if (e.key === "Enter") {
+      if(phone.length !== 10) {
+        alert("Please enter a valid 10-digit phone number.");
+        return;
+      }
+      try {
+        const token = localStorage.getItem("token");
+        const updated = await updateUserProfile({ name, email, phone }, token);
+        setProfile(updated.user);
+        alert("Profile updated!");
+      } catch (err) {
+        console.error("Update failed:", err);
+      }
     }
   };
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete your account?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete your account?"
+    );
     if (confirmDelete) {
       try {
         const token = localStorage.getItem("token");
@@ -102,18 +116,43 @@ const ProfilePage = () => {
 
       <div className="profile-form">
         <label>Name:</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+
+        <label>Phone:</label>
+        <input
+          type="tel"
+          value={phone}
+          onChange={(e) => {
+            const input = e.target.value;
+            if (/^\d*$/.test(input) && input.length <= 10) {
+              setPhone(input);
+            }
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder="Enter 10-digit mobile number"
+          maxLength={10}
+        />
 
         <label>Email:</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-
-        <div className="profile-buttons">
-          <button className="save-btn" onClick={handleSave}>Save Changes</button>
-          <button className="delete-btn" onClick={handleDelete}>Delete Account</button>
-        </div>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
       </div>
 
-      <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      <div className="profile-bottom-buttons">
+       
+        <button className="delete-btn" onClick={handleDelete}>
+          Delete Account
+        </button>
+      </div>
     </div>
   );
 };
