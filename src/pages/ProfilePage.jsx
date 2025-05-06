@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserProfile } from "../services/authService";
+import { getUserProfile, updateUserProfile, deleteUserAccount } from "../services/authService";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState(
     localStorage.getItem("profileImage") ||
-      "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
   );
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -20,11 +22,10 @@ const ProfilePage = () => {
           navigate("/login");
           return;
         }
-
         const data = await getUserProfile(token);
         setProfile(data.user);
-
-        // 👇 Save name to localStorage
+        setName(data.user.name);
+        setEmail(data.user.email);
         localStorage.setItem("username", data.user.name);
       } catch (error) {
         console.error(error);
@@ -52,32 +53,67 @@ const ProfilePage = () => {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const updated = await updateUserProfile({ name, email }, token);
+      alert("Profile updated successfully!");
+      setProfile(updated.user);
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete your account?");
+    if (confirmDelete) {
+      try {
+        const token = localStorage.getItem("token");
+        await deleteUserAccount(token);
+        localStorage.removeItem("token");
+        alert("Account deleted");
+        navigate("/login");
+      } catch (err) {
+        console.error("Delete failed:", err);
+      }
+    }
+  };
+
   if (!profile) return <p>Loading profile...</p>;
 
   return (
-    <div className="profile-container">
+    <div className="profile-wrapper">
       <h2>My Profile</h2>
-      <img
-        src={profileImage}
-        alt="Profile"
-        width="120"
-        height="120"
-        style={{ cursor: "pointer", borderRadius: "50%" }}
-        onClick={handleImageClick}
-      />
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        accept="image/*"
-        onChange={handleImageChange}
-      />
-      <h3>{profile.name}</h3>
-      <p>{profile.email}</p>
+      <div className="profile-image-section">
+        <img
+          src={profileImage}
+          alt="Profile"
+          className="profile-img"
+          onClick={handleImageClick}
+        />
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+      </div>
 
-      <button onClick={handleLogout} className="logout-button">
-        Logout
-      </button>
+      <div className="profile-form">
+        <label>Name:</label>
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+
+        <label>Email:</label>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+        <div className="profile-buttons">
+          <button className="save-btn" onClick={handleSave}>Save Changes</button>
+          <button className="delete-btn" onClick={handleDelete}>Delete Account</button>
+        </div>
+      </div>
+
+      <button className="logout-btn" onClick={handleLogout}>Logout</button>
     </div>
   );
 };
